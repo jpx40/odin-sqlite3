@@ -11,13 +11,13 @@ DB :: sqlite.Sqlite3
 Query :: sqlite.Stmt
 Status :: sqlite.Status
 
-status_explain :: proc(status: Status) -> cstring {
-    return sqlite.errstr(status)
+status_explain :: proc(status: Status) -> string {
+    return string(sqlite.errstr(status))
 }
 
-open :: proc(filename: cstring) -> (^DB, Status) {
+open :: proc(filename: string) -> (^DB, Status) {
     db: ^DB
-    status := sqlite.open_v2(filename, &db, {.Read_Write, .Create}, nil)
+    status := sqlite.open_v2(strings.unsafe_string_to_cstring(filename), &db, {.Read_Write, .Create}, nil)
     if status != nil {
         return nil, status
     }
@@ -194,5 +194,7 @@ where
                 panic("Unsupported type for accepting SQL values in the given struct")
         }
     }
+    // clean the query
+    defer sqlite.finalize(query)
     return t, true
 }
