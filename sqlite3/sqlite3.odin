@@ -16,7 +16,10 @@ when ODIN_OS == .Windows {
 } else when ODIN_OS == .Darwin {
  
 
-    foreign import sqlite3 "system:sqlite3"
+    foreign import sqlite3 { "system:sqlite3",
+  "system:pthread",
+        "system:dl",
+        "system:m",}
  
 }
 
