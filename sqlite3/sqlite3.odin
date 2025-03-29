@@ -13,6 +13,11 @@ when ODIN_OS == .Windows {
         "system:dl",
         "system:m",
     }
+} else when ODIN_OS == .Darwin {
+ 
+
+    foreign import sqlite3 "system:sqlite3"
+ 
 }
 
 VERSION        :: "3.45.1"
